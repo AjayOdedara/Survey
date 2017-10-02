@@ -7,10 +7,12 @@
 //
 
 import XCTest
+import p2_OAuth2
 @testable import TestAssign
 
 class TestAssignTests: XCTestCase {
     
+    var coreRepo = CoreRepository(apiRoot: Constant.apiRoot)
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -21,15 +23,31 @@ class TestAssignTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testReAuth(){
+        
+        self.coreRepo.getSurveys(onCompletion: { (data) in
+            print("success")
+        }) { (error) in
+            print(error?.localizedDescription ?? "Error")
+        }
+
     }
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
-            // Put the code you want to measure the time of here.
+            oauth2 = MobileOAuthPasswordGrant(userName: Constant.Config.username, password: Constant.Config.password)
+            oauth2.authorize() { authParameters, error in
+                if let params = authParameters {
+                    print("Authorized! Access token is in `oauth2.accessToken`")
+                    print("Authorized! Additional parameters: \(params)")
+                }
+                else {
+                    
+                    print(error?.localizedDescription ?? "Error")
+                }
+            }
+
         }
     }
     
