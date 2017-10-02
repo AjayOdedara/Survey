@@ -33,6 +33,7 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.button.isHidden = true
         setUpBasicUI()
         getSurveyData()
     }
@@ -79,6 +80,7 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     func getSurveyData(){
         indicator.showActivityIndicator(uiView: self.view)
         coreRepo.getSurveys(onCompletion: { (data) in
+            self.button.isHidden = false
             self.coreRepo.surveys = data
             self.setUpData(surveys: self.coreRepo.surveys!)
             self.indicator.hideActivityIndicator(uiView: self.view)
@@ -90,7 +92,6 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     
     func setUpBasicUI(){
         
-//        self.button.isHidden = true
         self.navigationController?.navigationBar.isHidden = true
         clipView = SubView(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: view.bounds.size.height))
         clipView.clipsToBounds = true
@@ -113,9 +114,11 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     }
     
     func setUpData(surveys : Surveys){
+        
         guard let pages = coreRepo.surveys?.survey?.count else {
             return
         }
+        // Set Pages
         pageControl = VerticalPageControl(numberOfPages: pages)
         var frame: CGRect = pageControl!.frame
         frame.origin.x = view.bounds.size.width - frame.size.width - 10
@@ -127,6 +130,8 @@ class ViewController: UIViewController, UIScrollViewDelegate{
         var currentY: CGFloat = 0
         
         
+        
+        //Set Page Images
         for i in 0..<pages {
             
             let viewFront = UIView(frame:CGRect(x: 0, y: currentY, width: scrollView!.bounds.size.width, height: CGFloat(kScrollViewHeight)))
@@ -157,6 +162,8 @@ class ViewController: UIViewController, UIScrollViewDelegate{
             
         }
         
+        // Assign ScrollView Content From Pages
+        
         scrollView?.contentSize = CGSize(width: (scrollView?.contentSize.width)!, height: currentY)
         titleLabel.text = coreRepo.surveys?.survey?[0].title
         desLabel.text = coreRepo.surveys?.survey?[0].descrit
@@ -165,6 +172,7 @@ class ViewController: UIViewController, UIScrollViewDelegate{
         
         
     }
+    //MARK: - Simple Animations
     func labelAnimate(label:UILabel){
         label.center.x = view.center.x
         label.center.x -= view.bounds.width

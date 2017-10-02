@@ -1,6 +1,6 @@
 
 //
-//  ConnectMobileOAuthGran.swift
+//  MobileOAuthGran.swift
 //  TestAssign
 //
 //  Created by Ajay Odedra on 29/09/17.
